@@ -1,5 +1,5 @@
 {
-  "name": "@rbxts/transformer-setget",
+  "name": "rbxts.transformer-setget",
   "version": "1.0.0",
   "description": "Transformer that implements getters and setters by converting them into methods and method calls",
   "main": "out/index.js",
