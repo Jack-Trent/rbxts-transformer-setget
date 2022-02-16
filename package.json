@@ -1,10 +1,18 @@
 {
   "name": "rbxts-transformer-setget",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transformer that implements getters and setters by converting them into methods and method calls",
   "main": "out/index.js",
   "author": "Jack Trent (https://github.com/jack-trent)",
   "license": "ISC",
+  "keywords": [
+    "rbxts",
+    "getters",
+    "setters",
+    "setget",
+    "@rbxts",
+    "transformer"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/jack-trent/rbxts-transformer-setget.git"

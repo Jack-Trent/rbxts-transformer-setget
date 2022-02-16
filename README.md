@@ -4,6 +4,26 @@ This transformer implements Getters and Setters to roblox-ts by converting them 
 
 Please note that this does not solve the problems pertaining to why Getters/Setters were removed from roblox-ts in the first place as detailed [here](https://github.com/roblox-ts/roblox-ts/issues/457) but should work fine if you avoid union types that have Getters/Setters.
 
+## Usage
+
+To use this transformer you have to add rbxts-transformer-setget to your tsconfig.json file in compilerOptions config
+
+```json
+"plugins": [
+	{
+		"transform": "rbxts-transformer-setget"
+	}
+]
+```
+
+If you use eslint you will need to add the following rule to your .eslintrc file in the rules config
+
+```json
+	"rules": {
+		"roblox-ts/no-getters-or-setters": "off"
+	}
+```
+
 ## Example
 
 ```ts
