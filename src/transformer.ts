@@ -75,7 +75,7 @@ function visitSetAccessorDeclaration(
         undefined // Get parameter type from accessor declaration?
       ),
     ],
-    node.type,
+    factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
     node.body
   );
 }
