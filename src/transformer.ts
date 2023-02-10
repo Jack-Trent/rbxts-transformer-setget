@@ -43,7 +43,6 @@ function visitGetAccessorDeclaration(
   return factory.createMethodDeclaration(
     undefined,
     undefined,
-    undefined,
     factory.createIdentifier("_get" + node.name.getText()),
     undefined,
     undefined,
@@ -61,7 +60,6 @@ function visitSetAccessorDeclaration(
   return factory.createMethodDeclaration(
     undefined,
     undefined,
-    undefined,
     factory.createIdentifier("_set" + node.name.getText()),
     undefined,
     undefined,
@@ -69,10 +67,11 @@ function visitSetAccessorDeclaration(
       factory.createParameterDeclaration(
         undefined,
         undefined,
-        undefined,
         factory.createIdentifier(node.parameters[0].getText()),
         undefined,
-        undefined // Get parameter type from accessor declaration?
+        undefined,
+        //node.parameters[0].type, // Get parameter type from accessor declaration?
+        undefined
       ),
     ],
     factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
