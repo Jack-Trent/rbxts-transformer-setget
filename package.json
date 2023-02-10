@@ -1,6 +1,6 @@
 {
   "name": "rbxts-transformer-setget",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "Transformer that implements getters and setters by converting them into methods and method calls",
   "main": "out/index.js",
   "author": "Jack Trent (https://github.com/jack-trent)",
@@ -18,21 +18,21 @@
     "url": "https://github.com/jack-trent/rbxts-transformer-setget.git"
   },
   "dependencies": {
-    "typescript": "^4.9.4"
+    "typescript": "4.9.4"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"
   },
   "devDependencies": {
-    "@types/node": "^17.0.18",
-    "@typescript-eslint/eslint-plugin": "^5.12.0",
-    "@typescript-eslint/parser": "^5.12.0",
-    "ts-expose-internals": "^4.9.5",
-    "eslint": "^8.9.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.5.1"
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "ts-expose-internals": "4.9.5",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
   },
   "files": [
     "out"
