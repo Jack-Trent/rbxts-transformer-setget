@@ -1,5 +1,5 @@
-import ts from "typescript";
-import {} from "ts-expose-internals";
+import ts, { PostfixUnaryExpression, PrefixUnaryExpression } from "typescript";
+import { } from "ts-expose-internals";
 
 export interface TransformerConfig {
   _: void;
@@ -112,7 +112,7 @@ function visitPropertyAccessExpression(
 function visitBinaryExpression(
   context: TransformContext,
   node: ts.BinaryExpression
-) {
+): ts.Node | ts.Node[] {
   const { factory } = context;
   const dec = context.program
     .getTypeChecker()
@@ -121,46 +121,92 @@ function visitBinaryExpression(
     dec?.kind === ts.SyntaxKind.SetAccessor ||
     dec?.kind === ts.SyntaxKind.GetAccessor
   ) {
-    let rhs: ts.Expression = node.right;
-    switch (node.operatorToken.kind) {
-      case ts.SyntaxKind.PlusEqualsToken:
-        rhs = factory.createBinaryExpression(
-          node.left,
-          factory.createToken(ts.SyntaxKind.PlusToken),
-          node.right
+    if (node.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+      if (ts.isPropertyAccessExpression(node.left)) {
+        return factory.createMethodCall(
+          node.left.expression,
+          factory.createIdentifier("_set" + node.left.name.getText()),
+          [node.right]
         );
-        break;
-      case ts.SyntaxKind.MinusEqualsToken:
-        rhs = factory.createBinaryExpression(
-          node.left,
-          factory.createToken(ts.SyntaxKind.MinusToken),
-          node.right
+      }
+    } else if (
+      node.operatorToken.kind === ts.SyntaxKind.PlusEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.MinusEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.SlashEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.AsteriskEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.PercentEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.AmpersandEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.BarBarEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.QuestionQuestionEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.BarEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.CaretEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.LessThanLessThanEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.GreaterThanGreaterThanEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken ||
+      node.operatorToken.kind === ts.SyntaxKind.AsteriskAsteriskEqualsToken
+    ) {
+      if (ts.isPropertyAccessExpression(node.left)) {
+        let token: ts.SyntaxKind = ts.SyntaxKind.PlusToken;
+        switch (node.operatorToken.kind) {
+          case ts.SyntaxKind.PlusEqualsToken:
+            token = ts.SyntaxKind.PlusToken;
+            break;
+          case ts.SyntaxKind.MinusEqualsToken:
+            token = ts.SyntaxKind.MinusToken;
+            break;
+          case ts.SyntaxKind.SlashEqualsToken:
+            token = ts.SyntaxKind.SlashToken;
+            break;
+          case ts.SyntaxKind.AsteriskEqualsToken:
+            token = ts.SyntaxKind.AsteriskToken;
+            break;
+          case ts.SyntaxKind.PercentEqualsToken:
+            token = ts.SyntaxKind.PercentToken;
+            break;
+          case ts.SyntaxKind.AmpersandEqualsToken:
+            token = ts.SyntaxKind.AmpersandToken;
+            break;
+          case ts.SyntaxKind.BarEqualsToken:
+            token = ts.SyntaxKind.BarToken;
+            break;
+          case ts.SyntaxKind.CaretEqualsToken:
+            token = ts.SyntaxKind.CaretToken;
+            break;
+          case ts.SyntaxKind.BarBarEqualsToken:
+            token = ts.SyntaxKind.BarBarToken;
+            break;
+          case ts.SyntaxKind.AmpersandAmpersandEqualsToken:
+            token = ts.SyntaxKind.AmpersandAmpersandToken;
+            break;
+          case ts.SyntaxKind.QuestionQuestionEqualsToken:
+            token = ts.SyntaxKind.QuestionQuestionToken;
+            break;
+          case ts.SyntaxKind.LessThanLessThanEqualsToken:
+            token = ts.SyntaxKind.LessThanLessThanToken;
+            break;
+          case ts.SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            token = ts.SyntaxKind.GreaterThanGreaterThanToken;
+            break;
+          case ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            token = ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+            break;
+          case ts.SyntaxKind.AsteriskAsteriskEqualsToken:
+            token = ts.SyntaxKind.AsteriskAsteriskToken;
+            break;
+        }
+        return factory.createMethodCall(
+          node.left.expression,
+          factory.createIdentifier("_set" + node.left.name.getText()),
+          [
+            factory.createBinaryExpression(
+              node.left,
+              factory.createToken(token),
+              node.right
+            ),
+          ]
         );
-        break;
-      case ts.SyntaxKind.SlashEqualsToken:
-        rhs = factory.createBinaryExpression(
-          node.left,
-          factory.createToken(ts.SyntaxKind.SlashToken),
-          node.right
-        );
-        break;
-      case ts.SyntaxKind.AsteriskEqualsToken:
-        rhs = factory.createBinaryExpression(
-          node.left,
-          factory.createToken(ts.SyntaxKind.AsteriskToken),
-          node.right
-        );
-        break;
-      default:
-        break;
-    }
-    if (ts.isPropertyAccessExpression(node.left)) {
-      // console.log(node.left.getText());
-      return factory.createMethodCall(
-        node.left.expression,
-        factory.createIdentifier("_set" + node.left.name.getText()),
-        [rhs]
-      );
+      }
     }
   }
   return context.transformBinary(node);
